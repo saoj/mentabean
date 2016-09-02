@@ -86,6 +86,7 @@ public class SQLBuilder implements CharSequence {
 	    return sb.capacity();
     }
 
+	@Override
 	public int hashCode() {
 	    return sb.hashCode();
     }
@@ -102,6 +103,7 @@ public class SQLBuilder implements CharSequence {
 	    sb.setLength(newLength);
     }
 
+	@Override
 	public boolean equals(Object obj) {
 	    return sb.equals(obj);
     }
@@ -292,6 +294,7 @@ public class SQLBuilder implements CharSequence {
 	    return this;
     }
 
+	@Override
 	public String toString() {
 	    return sb.toString();
     }
