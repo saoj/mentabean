@@ -19,10 +19,10 @@
 		</license>
 	</licenses>
 	<scm>
-		<connection>scm:svn:svn://soliveirajr.com/mentabean/trunk</connection>
-		<developerConnection>scm:svn:svn://soliveirajr.com/mentabean/trunk</developerConnection>
-		<url>svn://soliveirajr.com/mentabean/trunk</url>
-	</scm>
+		<connection>scm:git:git@github.com:saoj/mentabean.git</connection>
+		<url>scm:git:git@github.com:saoj/mentabean.git</url>
+		<developerConnection>scm:git:git@github.com:saoj/mentabean.git</developerConnection>
+    </scm>
 	<distributionManagement>
 		<repository>
 			<id>sonatype-nexus-staging</id>
@@ -38,8 +38,6 @@
 	<properties>
 		<build.final.name>mentabean</build.final.name>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<svn.tags>svn://soliveirajr.com/mentabean/tags</svn.tags>
-		<svn.url>svn://soliveirajr.com/mentabean/trunk</svn.url>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -208,8 +206,7 @@
 			<plugin>
 				<artifactId>maven-release-plugin</artifactId>
 				<configuration>
-					<tagBase>svn://soliveirajr.com/mentabean/tags</tagBase>
-					<connectionUrl>scm:svn:svn://soliveirajr.com/mentabean/trunk</connectionUrl>
+					<connectionUrl>scm:git:git@github.com:saoj/mentabean.git</connectionUrl>
 					<mavenExecutorId>forked-path</mavenExecutorId>
 				</configuration>
 			</plugin>
