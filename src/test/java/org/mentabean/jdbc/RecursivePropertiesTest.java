@@ -963,22 +963,22 @@ public class RecursivePropertiesTest extends AbstractBeanSessionTest {
 			Alias<Customer> c = builder.aliasTo(Customer.class, "c");
 			
 			// returns (will be removed from buildSelect and populateBean)
-			c.setReturnMinus(c.pxy().getActive());
+			c.setReturnMinus(c.proxy().getActive());
 			
 			Query query = builder.select(s, c)
 			.from(s)
 			.leftJoin(c).pkOf(c).in(s)
-			.where().clause(s.pxy().getId()).condition(new GreaterThan(new ParamValue(0))).and()
+			.where().clause(s.proxy().getId()).condition(new GreaterThan(new ParamValue(0))).and()
 			.clause(new Coalesce()
-				.addParam(new ParamField(s, s.pxy().getId()))
+				.addParam(new ParamField(s, s.proxy().getId()))
 				.addParam(new ParamValue(0)))
 					.condition(new GreaterThan(new ParamValue(0))).and()
 			.clause(new Coalesce()
-				.addParam(new ParamFunction(new Lower(new ParamField(c, c.pxy().getName()))))
+				.addParam(new ParamFunction(new Lower(new ParamField(c, c.proxy().getName()))))
 				.addParam(new ParamValue("i")))
 					.condition(new Like(new ParamValue("%i%")))
-			.orderBy().asc(s, s.pxy().getId())
-			.desc(s, s.pxy().getCustomer().getCode())
+			.orderBy().asc(s, s.proxy().getId())
+			.desc(s, s.proxy().getCustomer().getCode())
 			.limit(2).offset(0);
 			
 			stmt = query.prepare();

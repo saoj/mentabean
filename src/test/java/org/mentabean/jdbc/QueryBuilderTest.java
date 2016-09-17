@@ -334,7 +334,7 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 			Alias<Company> c = builder.aliasTo(Company.class, "com");
 			Alias<Post> p = builder.aliasTo(Post.class, "p");
 			Alias<Employee> e2 = builder.aliasTo(Employee.class, "emp2");
-			e2.setReturns(e2.pxy().getNumber());
+			e2.setReturns(e2.proxy().getNumber());
 			
 			Query query = builder.select(p, c, e)
 			.from(p)
@@ -343,7 +343,7 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 			.join(e).pkOf(e).in(p)
 			
 			.where()
-			.clause(new Substring(new ParamField(e, e.pxy().getName()))
+			.clause(new Substring(new ParamField(e, e.proxy().getName()))
 				
 				/*
 				 * it's joke (only for showing that's possible to do that)
@@ -354,10 +354,10 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 										new ParamValue("c"))))))))
 				.endIndex(new ParamFunction(new Length(
 						new ParamFunction(new Lower(
-								new ParamField(e, e.pxy().getName())))))))
+								new ParamField(e, e.proxy().getName())))))))
 				.condition(new Like(new ParamValue("%o"))).and()
 				
-			.clause(e.pxy().getNumber()).condition(
+			.clause(e.proxy().getNumber()).condition(
 					new In(new ParamSubQuery(builder.subQuery()
 							.select(e2)
 							.from(e2)
@@ -367,9 +367,9 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 									.condition(new Equals(new ParamValue("te")))
 							))).and()
 			
-			.clause(new Lower(new ParamField(c, c.pxy().getName()))).condition( 
+			.clause(new Lower(new ParamField(c, c.proxy().getName()))).condition( 
 							new Equals(new ParamFunction(new Lower(new ParamValue("W3c")))))
-			.orderBy().asc(p, p.pxy().getDescription())
+			.orderBy().asc(p, p.proxy().getDescription())
 			.limit(10);
 			
 			ppst = query.prepare();
@@ -542,9 +542,9 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.select(e)
 				.from(e)
 				.where()
-				.clause(e.pxy().getSalary())
+				.clause(e.proxy().getSalary())
 				.condition(new GreaterThan(15000))
-				.orderBy().asc(e, e.pxy().getName());
+				.orderBy().asc(e, e.proxy().getName());
 
 		List<Employee> list = query.executeQuery();
 
@@ -570,12 +570,12 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.join(p).pkOf(e).in(p)
 				.join(c).pkOf(c).in(p)
 				.where()
-				.clause(c.pxy().getName())
+				.clause(c.proxy().getName())
 				.condition(new Equals("Google"))
 				.and()
-				.clause(e.pxy().getName())
+				.clause(e.proxy().getName())
 				.condition(new Like("M%"))
-				.orderBy().asc(e, e.pxy().getName());
+				.orderBy().asc(e, e.proxy().getName());
 
 		List<Employee> list = query.executeQuery();
 
@@ -601,12 +601,12 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.join(p).pkOf(e).in(p)
 				.join(c).pkOf(c).in(p)
 				.where()
-				.clause(c.pxy().getId())
+				.clause(c.proxy().getId())
 				.condition(new Equals("1"))
 				.and()
-				.clause(e.pxy().getSalary())
+				.clause(e.proxy().getSalary())
 				.condition(new Between(10000, 15000))
-				.orderBy().asc(e, e.pxy().getSalary());
+				.orderBy().asc(e, e.proxy().getSalary());
 
 		List<Employee> list = query.executeQuery();
 
@@ -632,15 +632,15 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				
 				.join(e).pkOf(e).in(p)
 				//here we set the bean where 'e' alias (employee) will be populate
-				.inProperty(p.pxy().getEmployee())
+				.inProperty(p.proxy().getEmployee())
 				
 				.join(c).pkOf(c).in(p)
 				//here we set the bean where 'c' alias (company) will be populate				
-				.inProperty(p.pxy().getCompany())
+				.inProperty(p.proxy().getCompany())
 				
 				.orderBy()
-				.asc(c, c.pxy().getName())
-				.desc(e, e.pxy().getName());
+				.asc(c, c.proxy().getName())
+				.desc(e, e.proxy().getName());
 
 		List<Post> list = query.executeQuery();
 		
@@ -661,7 +661,7 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 		QueryBuilder builder = session.buildQuery();
 		Alias<Employee> e = builder.aliasTo(Employee.class, "emp");
 		Alias<Employee> eSub = builder.aliasTo(Employee.class, "emp_sub");
-		eSub.setReturns(eSub.pxy().getNumber());
+		eSub.setReturns(eSub.proxy().getNumber());
 		Alias<Post> p = builder.aliasTo(Post.class);
 		
 		Query query = builder
@@ -669,7 +669,7 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.from(e)
 				.where()
 				
-				.clause(e.pxy().getNumber())
+				.clause(e.proxy().getNumber())
 				
 				//sub query in 'NOT IN' condition
 				.condition(new NotIn(new ParamSubQuery(
@@ -700,7 +700,7 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.from(e)
 				.leftJoin(p).pkOf(e).in(p)
 				.where()
-				.clause(p.pxy().getDescription())
+				.clause(p.proxy().getDescription())
 				
 				//this will be converted to 'IS NULL' in query. See the Equals condition
 				.condition(new Equals(null));
@@ -725,12 +725,12 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.from(e)
 				.where()
 				
-				.clause(new Length(new ParamField(e, e.pxy().getName())))
+				.clause(new Length(new ParamField(e, e.proxy().getName())))
 				.condition(new GreaterThan(15))
 				
 				.orderBy()
-				.asc(new ParamFunction(new Length(new ParamField(e, e.pxy().getName()))))
-				.desc(e, e.pxy().getName());
+				.asc(new ParamFunction(new Length(new ParamField(e, e.proxy().getName()))))
+				.desc(e, e.proxy().getName());
 		
 		List<Employee> list = query.executeQuery();
 		
@@ -750,8 +750,8 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 		Alias<Employee> e = builder.aliasTo(Employee.class, "e");
 		Alias<Post> p = builder.aliasTo(Post.class, "p");
 		
-		Sentence count = new Sentence(new Count(new ParamField(e, e.pxy().getNumber())))
-			.fromProperty(c.pxy().getEmployeesCount());
+		Sentence count = new Sentence(new Count(new ParamField(e, e.proxy().getNumber())))
+			.fromProperty(c.proxy().getEmployeesCount());
 		
 		Query query = builder
 				.select(c)
@@ -761,7 +761,7 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.leftJoin(e).pkOf(e).in(p)
 				.groupBy(c)
 				.orderBy()
-				.asc(c, c.pxy().getName());
+				.asc(c, c.proxy().getName());
 		
 		List<Company> list = query.executeQuery();
 		
@@ -785,8 +785,8 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 		Alias<Employee> e = builder.aliasTo(Employee.class, "e");
 		Alias<Post> p = builder.aliasTo(Post.class, "p");
 		
-		Sentence count = new Sentence(new Count(new ParamField(e, e.pxy().getNumber())))
-			.fromProperty(c.pxy().getEmployeesCount());
+		Sentence count = new Sentence(new Count(new ParamField(e, e.proxy().getNumber())))
+			.fromProperty(c.proxy().getEmployeesCount());
 		
 		Query query = builder
 				.select(c)
@@ -823,23 +823,23 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 		Alias<Post> p2 = builder.aliasTo(Post.class, "p2");
 		
 		Query sub = builder.subQuery()
-				.select(new Sentence(new Count(new ParamField(p2, p2.pxy().getDescription()))).name("count_sub"))
+				.select(new Sentence(new Count(new ParamField(p2, p2.proxy().getDescription()))).name("count_sub"))
 				.from(p2)
 				.where()
-				.clause(p2.pxy().getCompany().getId())
-				.condition(new Equals(new ParamField(c, c.pxy().getId())));
+				.clause(p2.proxy().getCompany().getId())
+				.condition(new Equals(new ParamField(c, c.proxy().getId())));
 		
 		Query query = builder
 				.select(p, c)
 					.add(new Sentence(sub)
-					.fromProperty(p.pxy().getCompany().getEmployeesCount()))
+					.fromProperty(p.proxy().getCompany().getEmployeesCount()))
 				.from(p)
 				.leftJoin(c).pkOf(c).in(p)
-				.inProperty(p.pxy().getCompany())
+				.inProperty(p.proxy().getCompany())
 				.leftJoin(e).pkOf(e).in(p)
-				.inProperty(p.pxy().getEmployee())
+				.inProperty(p.proxy().getEmployee())
 				.orderBy()
-				.asc(c, c.pxy().getName());
+				.asc(c, c.proxy().getName());
 		
 		List<Post> list = query.executeQuery();
 		
@@ -859,15 +859,15 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 		QueryBuilder builder = session.buildQuery();
 		Alias<Company> c = builder.aliasTo(Company.class, "c");
 		
-		Sentence nameUpper = new Sentence(new Upper(new ParamField(c, c.pxy().getName())))
-			.fromProperty(c.pxy().getName());
+		Sentence nameUpper = new Sentence(new Upper(new ParamField(c, c.proxy().getName())))
+			.fromProperty(c.proxy().getName());
 		
 		Query query = builder
 				.select(c)
 				.add(nameUpper)
 				.from(c)
 				.orderBy()
-				.asc(c, c.pxy().getName());
+				.asc(c, c.proxy().getName());
 		
 		List<Company> list = query.executeQuery();
 		
@@ -885,15 +885,15 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 		
 		QueryBuilder builder = session.buildQuery();
 		Alias<Company> c = builder.aliasTo(Company.class, "c");
-		c.setReturnMinus(c.pxy().getName());
+		c.setReturnMinus(c.proxy().getName());
 		Alias<Employee> e = builder.aliasTo(Employee.class, "e");
 		Alias<Post> p = builder.aliasTo(Post.class, "p");
 		
-		Sentence nameUpper = new Sentence(new Upper(new ParamField(c, c.pxy().getName())))
-		.fromProperty(c.pxy().getName());
+		Sentence nameUpper = new Sentence(new Upper(new ParamField(c, c.proxy().getName())))
+		.fromProperty(c.proxy().getName());
 		
-		Sentence count = new Sentence(new Count(new ParamField(e, e.pxy().getNumber())))
-		.fromProperty(c.pxy().getEmployeesCount());
+		Sentence count = new Sentence(new Count(new ParamField(e, e.proxy().getNumber())))
+		.fromProperty(c.proxy().getEmployeesCount());
 		
 		Query query = builder
 				.select(c)
@@ -958,9 +958,9 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.select(p, e, c)
 				.from(p)
 				.leftJoin(c).pkOf(c).in(p)
-					.inProperty(p.pxy().getCompany())
+					.inProperty(p.proxy().getCompany())
 				.leftJoin(e).pkOf(e).in(p)
-					.inProperty(p.pxy().getEmployee());
+					.inProperty(p.proxy().getEmployee());
 		
 		List<Post> list = query.executeQuery();
 		
@@ -1047,7 +1047,7 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 			Alias<Post> p = builder.aliasTo(Post.class, "p");
 
 			Sentence count = new Sentence(new Count(
-					new ParamField(e, e.pxy().getNumber())))
+					new ParamField(e, e.proxy().getNumber())))
 					.returnType(DBTypes.INTEGER)
 					.name("count");
 
@@ -1103,7 +1103,7 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 		
 		Sentence count = new Sentence(
 				new Add()
-				.param(new Count(new ParamField(p, p.pxy().getDescription())))
+				.param(new Count(new ParamField(p, p.proxy().getDescription())))
 				.param(4))
 		.name("count")
 		.returnType(DBTypes.INTEGER);
@@ -1148,22 +1148,22 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.select(p, e, c)
 				.from(p)
 				.leftJoin(c).pkOf(c).in(p)
-					.inProperty(p.pxy().getCompany())
+					.inProperty(p.proxy().getCompany())
 				.leftJoin(e).pkOf(e).in(p)
-					.inProperty(p.pxy().getEmployee())
+					.inProperty(p.proxy().getEmployee())
 				.where()
 				.openPar()
-					.clause(c.pxy().getName())
+					.clause(c.proxy().getName())
 					.condition(new Like("%O%"))
 					.or()
-					.clause(e.pxy().getName())
+					.clause(e.proxy().getName())
 					.condition(new Like("%O%"))
 				.closePar()
 				.and()
-				.clause(e.pxy().getSalary())
+				.clause(e.proxy().getSalary())
 				.condition(new LessThan(50000))
 				.orderBy()
-				.asc(p, p.pxy().getDescription());
+				.asc(p, p.proxy().getDescription());
 		
 		List<Post> list = query.executeQuery();
 		
@@ -1187,16 +1187,16 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 		assertEquals(6, builder
 				.select(p, e, c)
 				.from(p)
-				.leftJoin(c).on(c.pxy().getId()).eq(p.pxy().getCompany().getId())
-					.eqProperty(p.pxy().getCompany())
-				.leftJoin(e).on(e.pxy().getNumber()).eq(p.pxy().getEmployee().getNumber())
-					.eqProperty(p.pxy().getEmployee())
+				.leftJoin(c).on(c.proxy().getId()).eq(p.proxy().getCompany().getId())
+					.eqProperty(p.proxy().getCompany())
+				.leftJoin(e).on(e.proxy().getNumber()).eq(p.proxy().getEmployee().getNumber())
+					.eqProperty(p.proxy().getEmployee())
 				.where()
 				.openPar()
-				.clauseIf(false, c.pxy().getName())
+				.clauseIf(false, c.proxy().getName())
 				.condition(new Like("Google"))
 				.or()
-				.clauseIf(false, c.pxy().getName())
+				.clauseIf(false, c.proxy().getName())
 				.condition(new Like("Oracle"))
 				.closePar()
 				.executeQuery().size());
@@ -1204,19 +1204,19 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 		assertEquals(6, builder
 				.select(p, e, c)
 				.from(p)
-				.leftJoin(c).on(c.pxy().getId()).eq(p.pxy().getCompany().getId())
-				.eqProperty(p.pxy().getCompany())
-				.leftJoin(e).on(e.pxy().getNumber()).eq(p.pxy().getEmployee().getNumber())
-				.eqProperty(p.pxy().getEmployee())
+				.leftJoin(c).on(c.proxy().getId()).eq(p.proxy().getCompany().getId())
+				.eqProperty(p.proxy().getCompany())
+				.leftJoin(e).on(e.proxy().getNumber()).eq(p.proxy().getEmployee().getNumber())
+				.eqProperty(p.proxy().getEmployee())
 				.where()
 				.openPar()
-					.clauseIf(false, c.pxy().getName())
+					.clauseIf(false, c.proxy().getName())
 					.condition(new Like("Google"))
 					.or()
-					.clauseIf(true, c.pxy().getName())
+					.clauseIf(true, c.proxy().getName())
 					.condition(new Like("%"))
 					.or()
-					.clauseIf(false, c.pxy().getName())
+					.clauseIf(false, c.proxy().getName())
 					.condition(new Like("Oracle"))
 				.closePar()
 				.executeQuery().size());
@@ -1224,21 +1224,21 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 		assertEquals(4, builder
 				.select(p, e, c)
 				.from(p)
-				.leftJoin(c).on(c.pxy().getId()).eq(p.pxy().getCompany().getId())
-				.eqProperty(p.pxy().getCompany())
-				.leftJoin(e).on(e.pxy().getNumber()).eq(p.pxy().getEmployee().getNumber())
-				.eqProperty(p.pxy().getEmployee())
+				.leftJoin(c).on(c.proxy().getId()).eq(p.proxy().getCompany().getId())
+				.eqProperty(p.proxy().getCompany())
+				.leftJoin(e).on(e.proxy().getNumber()).eq(p.proxy().getEmployee().getNumber())
+				.eqProperty(p.proxy().getEmployee())
 				.where()
 				.openPar()
-					.clauseIf(true, c.pxy().getName())
+					.clauseIf(true, c.proxy().getName())
 					.condition(new Like("Google"))
 					.or()
-					.clauseIf(false, c.pxy().getName())
+					.clauseIf(false, c.proxy().getName())
 					.condition(new Like("Oracle"))
 				.closePar()
 				.and()
 				.openPar()
-					.clauseIf(false, c.pxy().getName())
+					.clauseIf(false, c.proxy().getName())
 					.condition(new Like("Oracle"))
 				.closePar()
 				.executeQuery().size());
@@ -1246,24 +1246,24 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 		assertEquals(4, builder
 				.select(p, e, c)
 				.from(p)
-				.leftJoin(c).on(c.pxy().getId()).eq(p.pxy().getCompany().getId())
-				.eqProperty(p.pxy().getCompany())
-				.leftJoin(e).on(e.pxy().getNumber()).eq(p.pxy().getEmployee().getNumber())
-				.eqProperty(p.pxy().getEmployee())
+				.leftJoin(c).on(c.proxy().getId()).eq(p.proxy().getCompany().getId())
+				.eqProperty(p.proxy().getCompany())
+				.leftJoin(e).on(e.proxy().getNumber()).eq(p.proxy().getEmployee().getNumber())
+				.eqProperty(p.proxy().getEmployee())
 				.where()
 				.openPar()
-					.clauseIf(true, c.pxy().getName())
+					.clauseIf(true, c.proxy().getName())
 					.condition(new Like("Google"))
 					.or()
-					.clauseIf(false, c.pxy().getName())
+					.clauseIf(false, c.proxy().getName())
 					.condition(new Like("Oracle"))
 				.closePar()
 				.and()
 				.openPar()
-					.clauseIf(false, c.pxy().getName())
+					.clauseIf(false, c.proxy().getName())
 					.condition(new Like("Oracle"))
 					.and()
-					.clauseIf(true, c.pxy().getName())
+					.clauseIf(true, c.proxy().getName())
 					.condition(new Like("Google"))
 				.closePar()
 				.executeQuery().size());
@@ -1271,24 +1271,24 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 		assertEquals(4, builder
 				.select(p, e, c)
 				.from(p)
-				.leftJoin(c).on(c.pxy().getId()).eq(p.pxy().getCompany().getId())
-				.eqProperty(p.pxy().getCompany())
-				.leftJoin(e).on(e.pxy().getNumber()).eq(p.pxy().getEmployee().getNumber())
-				.eqProperty(p.pxy().getEmployee())
+				.leftJoin(c).on(c.proxy().getId()).eq(p.proxy().getCompany().getId())
+				.eqProperty(p.proxy().getCompany())
+				.leftJoin(e).on(e.proxy().getNumber()).eq(p.proxy().getEmployee().getNumber())
+				.eqProperty(p.proxy().getEmployee())
 				.where()
 				.openPar()
-					.clauseIf(true, c.pxy().getName())
+					.clauseIf(true, c.proxy().getName())
 					.condition(new Like("Google"))
 					.or()
-					.clauseIf(false, c.pxy().getName())
+					.clauseIf(false, c.proxy().getName())
 					.condition(new Like("Oracle"))
 				.closePar()
 				.and()
 				.openPar()
-					.clauseIf(false, c.pxy().getName())
+					.clauseIf(false, c.proxy().getName())
 					.condition(new Like("Oracle"))
 					.and()
-					.clauseIf(false, c.pxy().getName())
+					.clauseIf(false, c.proxy().getName())
 					.condition(new Like("Google"))
 				.closePar()
 				.executeQuery().size());
@@ -1296,24 +1296,24 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 		assertEquals(2, builder
 				.select(p, e, c)
 				.from(p)
-				.leftJoin(c).on(c.pxy().getId()).eq(p.pxy().getCompany().getId())
-				.eqProperty(p.pxy().getCompany())
-				.leftJoin(e).on(e.pxy().getNumber()).eq(p.pxy().getEmployee().getNumber())
-				.eqProperty(p.pxy().getEmployee())
+				.leftJoin(c).on(c.proxy().getId()).eq(p.proxy().getCompany().getId())
+				.eqProperty(p.proxy().getCompany())
+				.leftJoin(e).on(e.proxy().getNumber()).eq(p.proxy().getEmployee().getNumber())
+				.eqProperty(p.proxy().getEmployee())
 				.where()
 				.openPar()
-					.clauseIf(false, c.pxy().getName())
+					.clauseIf(false, c.proxy().getName())
 					.condition(new Like("Google"))
 					.or()
-					.clauseIf(false, c.pxy().getName())
+					.clauseIf(false, c.proxy().getName())
 					.condition(new Like("Oracle"))
 				.closePar()
 				.or()
 				.openPar()
-					.clauseIf(true, c.pxy().getName())
+					.clauseIf(true, c.proxy().getName())
 					.condition(new Like("Oracle"))
 					.and()
-					.clauseIf(false, c.pxy().getName())
+					.clauseIf(false, c.proxy().getName())
 					.condition(new Like("Google"))
 				.closePar()
 				.executeQuery().size());
@@ -1321,24 +1321,24 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 		assertEquals(6, builder
 				.select(p, e, c)
 				.from(p)
-				.leftJoin(c).on(c.pxy().getId()).eq(p.pxy().getCompany().getId())
-				.eqProperty(p.pxy().getCompany())
-				.leftJoin(e).on(e.pxy().getNumber()).eq(p.pxy().getEmployee().getNumber())
-				.eqProperty(p.pxy().getEmployee())
+				.leftJoin(c).on(c.proxy().getId()).eq(p.proxy().getCompany().getId())
+				.eqProperty(p.proxy().getCompany())
+				.leftJoin(e).on(e.proxy().getNumber()).eq(p.proxy().getEmployee().getNumber())
+				.eqProperty(p.proxy().getEmployee())
 				.where()
 				.openPar()
-					.clauseIf(false, c.pxy().getName())
+					.clauseIf(false, c.proxy().getName())
 					.condition(new Like("Google"))
 					.or()
-					.clauseIf(false, c.pxy().getName())
+					.clauseIf(false, c.proxy().getName())
 					.condition(new Like("Oracle"))
 				.closePar()
 				.or()
 				.openPar()
-					.clauseIf(false, c.pxy().getName())
+					.clauseIf(false, c.proxy().getName())
 					.condition(new Like("Oracle"))
 					.and()
-					.clauseIf(false, c.pxy().getName())
+					.clauseIf(false, c.proxy().getName())
 					.condition(new Like("Google"))
 				.closePar()
 				.executeQuery().size());
@@ -1346,20 +1346,20 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 		assertEquals(0, builder
 				.select(p, e, c)
 				.from(p)
-				.leftJoin(c).on(c.pxy().getId()).eq(p.pxy().getCompany().getId())
-				.eqProperty(p.pxy().getCompany())
-				.leftJoin(e).on(e.pxy().getNumber()).eq(p.pxy().getEmployee().getNumber())
-				.eqProperty(p.pxy().getEmployee())
+				.leftJoin(c).on(c.proxy().getId()).eq(p.proxy().getCompany().getId())
+				.eqProperty(p.proxy().getCompany())
+				.leftJoin(e).on(e.proxy().getNumber()).eq(p.proxy().getEmployee().getNumber())
+				.eqProperty(p.proxy().getEmployee())
 				.where()
 				.openPar()
-					.clauseIf(true, c.pxy().getName())
+					.clauseIf(true, c.proxy().getName())
 					.condition(new Like("Google"))
 					.or()
-					.clauseIf(false, c.pxy().getName())
+					.clauseIf(false, c.proxy().getName())
 					.condition(new Like("Oracle"))
 				.closePar()
 				.and()
-				.clause(c.pxy().getName())
+				.clause(c.proxy().getName())
 				.condition(new Like("Oracle"))
 				.executeQuery().size());
 		
@@ -1367,15 +1367,15 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.select(p, e, c)
 				.from(p)
 				.leftJoin(c).pkOf(c).in(p)
-					.inProperty(p.pxy().getCompany())
+					.inProperty(p.proxy().getCompany())
 				.leftJoin(e).pkOf(e).in(p)
-					.inProperty(p.pxy().getEmployee())
+					.inProperty(p.proxy().getEmployee())
 				.where()
 				.openPar()
-				.clauseIf(true, c.pxy().getName())
+				.clauseIf(true, c.proxy().getName())
 				.condition(new Like("Google"))
 				.or()
-				.clauseIf(false, c.pxy().getName())
+				.clauseIf(false, c.proxy().getName())
 				.condition(new Like("Oracle"))
 				.closePar()
 				.executeQuery().size());
@@ -1384,15 +1384,15 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.select(p, e, c)
 				.from(p)
 				.leftJoin(c).pkOf(c).in(p)
-					.inProperty(p.pxy().getCompany())
+					.inProperty(p.proxy().getCompany())
 				.leftJoin(e).pkOf(e).in(p)
-					.inProperty(p.pxy().getEmployee())
+					.inProperty(p.proxy().getEmployee())
 				.where()
 				.openPar()
-				.clauseIf(false, c.pxy().getName())
+				.clauseIf(false, c.proxy().getName())
 				.condition(new Like("Google"))
 				.or()
-				.clauseIf(true, c.pxy().getName())
+				.clauseIf(true, c.proxy().getName())
 				.condition(new Like("Oracle"))
 				.closePar()
 				.executeQuery().size());
@@ -1401,15 +1401,15 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.select(p, e, c)
 				.from(p)
 				.leftJoin(c).pkOf(c).in(p)
-					.inProperty(p.pxy().getCompany())
+					.inProperty(p.proxy().getCompany())
 				.leftJoin(e).pkOf(e).in(p)
-					.inProperty(p.pxy().getEmployee())
+					.inProperty(p.proxy().getEmployee())
 				.where()
 				.openPar()
-				.clauseIf(true, c.pxy().getName())
+				.clauseIf(true, c.proxy().getName())
 				.condition(new Like("Google"))
 				.and()
-				.clauseIf(true, c.pxy().getName())
+				.clauseIf(true, c.proxy().getName())
 				.condition(new Like("Oracle"))
 				.closePar()
 				.executeQuery().size());
@@ -1418,19 +1418,19 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.select(p, e, c)
 				.from(p)
 				.leftJoin(c).pkOf(c).in(p)
-					.inProperty(p.pxy().getCompany())
+					.inProperty(p.proxy().getCompany())
 				.leftJoin(e).pkOf(e).in(p)
-					.inProperty(p.pxy().getEmployee())
+					.inProperty(p.proxy().getEmployee())
 				.where()
-				.clauseIf(true, c.pxy().getName())
+				.clauseIf(true, c.proxy().getName())
 				.condition(new Like("Google"))
 				.and()
 				.openPar()
-					.clauseIf(false, c.pxy().getName())
+					.clauseIf(false, c.proxy().getName())
 					.condition(new Like("Oracle"))
 				.closePar()
 				.or()
-				.clauseIf(true, c.pxy().getName())
+				.clauseIf(true, c.proxy().getName())
 				.condition(new Like("Oracle"))
 				.executeQuery().size());
 		
@@ -1438,20 +1438,20 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.select(p, e, c)
 				.from(p)
 				.leftJoin(c).pkOf(c).in(p)
-					.inProperty(p.pxy().getCompany())
+					.inProperty(p.proxy().getCompany())
 				.leftJoin(e).pkOf(e).in(p)
-					.inProperty(p.pxy().getEmployee())
+					.inProperty(p.proxy().getEmployee())
 				.where()
-				.clauseIf(true, c.pxy().getName())
+				.clauseIf(true, c.proxy().getName())
 				.condition(new Like("Google"))
 				.and()
 				.openPar()
 					.openPar()
-						.clauseIf(false, c.pxy().getName())
+						.clauseIf(false, c.proxy().getName())
 						.condition(new Like("Oracle"))
 					.closePar()
 					.or()
-					.clauseIf(true, c.pxy().getName())
+					.clauseIf(true, c.proxy().getName())
 					.condition(new Like("Oracle"))
 				.closePar()
 				.executeQuery().size());
@@ -1460,19 +1460,19 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.selectDistinct(p, e, c)
 				.from(p)
 				.leftJoin(c).pkOf(c).in(p)
-					.inProperty(p.pxy().getCompany())
+					.inProperty(p.proxy().getCompany())
 				.leftJoin(e).pkOf(e).in(p)
-					.inProperty(p.pxy().getEmployee())
+					.inProperty(p.proxy().getEmployee())
 				.where()
 				.openPar()
-				.clauseIf(false, c.pxy().getName())
+				.clauseIf(false, c.proxy().getName())
 				.condition(new Like("Google"))
 				.or()
-				.clauseIf(false, c.pxy().getName())
+				.clauseIf(false, c.proxy().getName())
 				.condition(new Like("Oracle"))
 				.closePar()
 				.and()
-				.clauseIf(false, e.pxy().getName())
+				.clauseIf(false, e.proxy().getName())
 				.condition(new Like("%"))
 				.executeQuery().size());
 		
@@ -1480,19 +1480,19 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.selectDistinct(p, e, c)
 				.from(p)
 				.leftJoin(c).pkOf(c).in(p)
-				.inProperty(p.pxy().getCompany())
+				.inProperty(p.proxy().getCompany())
 				.leftJoin(e).pkOf(e).in(p)
-				.inProperty(p.pxy().getEmployee())
+				.inProperty(p.proxy().getEmployee())
 				.where()
 				.openPar()
-				.clauseIf(true, c.pxy().getName())
+				.clauseIf(true, c.proxy().getName())
 				.condition(new Like("Google"))
 				.or()
-				.clauseIf(true, c.pxy().getName())
+				.clauseIf(true, c.proxy().getName())
 				.condition(new Like("Oracle"))
 				.closePar()
 				.and()
-				.clauseIf(true, e.pxy().getName())
+				.clauseIf(true, e.proxy().getName())
 				.condition(new Like("%"))
 				.executeQuery().size());
 		
@@ -1500,28 +1500,28 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.select(p, e, c)
 				.from(p)
 				.leftJoin(c).pkOf(c).in(p)
-				.inProperty(p.pxy().getCompany())
+				.inProperty(p.proxy().getCompany())
 				.leftJoin(e).pkOf(e).in(p)
-				.inProperty(p.pxy().getEmployee())
+				.inProperty(p.proxy().getEmployee())
 				.where()
 				.openPar()
 					.openPar()
-						.clauseIf(true, c.pxy().getName())
+						.clauseIf(true, c.proxy().getName())
 						.condition(new Like("Google"))
 					.closePar()
 					.and()
 					.openPar()
-						.clauseIf(false, c.pxy().getName())
+						.clauseIf(false, c.proxy().getName())
 						.condition(new Like("Oracle"))
 						.or()
 						.openPar()
-							.clauseIf(true, c.pxy().getId())
+							.clauseIf(true, c.proxy().getId())
 							.condition(new NotEquals(null))
 						.closePar()
 					.closePar()
 				.closePar()
 				.and()
-				.clauseIf(false, e.pxy().getName())
+				.clauseIf(false, e.proxy().getName())
 				.condition(new Like("%"))
 				.limit(6)
 				.executeQuery().size());
@@ -1540,15 +1540,15 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.selectDistinct(p, e, c)
 				.from(p)
 				.leftJoin(c).pkOf(c).in(p)
-					.inProperty(p.pxy().getCompany())
+					.inProperty(p.proxy().getCompany())
 				.leftJoin(e).pkOf(e).in(p)
-					.inProperty(p.pxy().getEmployee())
+					.inProperty(p.proxy().getEmployee())
 				.where()
 				.openPar()
-				.clauseIf(false, c.pxy().getName())
+				.clauseIf(false, c.proxy().getName())
 				.condition(new Like("Google"))
 				.or()
-				.clauseIf(false, c.pxy().getName())
+				.clauseIf(false, c.proxy().getName())
 				.condition(new Like("Oracle"))
 				.closePar()
 				.limit(0)
@@ -1558,15 +1558,15 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 				.select(p, e, c)
 				.from(p)
 				.leftJoin(c).pkOf(c).in(p)
-				.inProperty(p.pxy().getCompany())
+				.inProperty(p.proxy().getCompany())
 				.leftJoin(e).pkOf(e).in(p)
-				.inProperty(p.pxy().getEmployee())
+				.inProperty(p.proxy().getEmployee())
 				.where()
 				.openPar()
-				.clauseIf(false, c.pxy().getName())
+				.clauseIf(false, c.proxy().getName())
 				.condition(new Like("Google"))
 				.or()
-				.clauseIf(false, c.pxy().getName())
+				.clauseIf(false, c.proxy().getName())
 				.condition(new Like("Oracle"))
 				.closePar()
 				.limit(3)
@@ -1592,9 +1592,9 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 		found = paramHandler.findBetter(builder, builder.subQuery().selectFrom(c));
 		Assert.assertTrue(found instanceof ParamSubQuery);
 		
-		builder.selectFrom(c).where().clause(c.pxy().getName()).condition(new NotEquals(null)).executeQuery();
+		builder.selectFrom(c).where().clause(c.proxy().getName()).condition(new NotEquals(null)).executeQuery();
 		
-		found = paramHandler.findBetter(builder, c.pxy().getName());
+		found = paramHandler.findBetter(builder, c.proxy().getName());
 		Assert.assertTrue(found instanceof ParamField);	
 		
 		builder = builder.subQuery();
@@ -1602,17 +1602,17 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 		builder.select(c, p)
 			.from(c)
 			.join(p).pkOf(c).in(p)
-			.where().clause(p.pxy().getDescription())
+			.where().clause(p.proxy().getDescription())
 			.condition(new NotEquals("aaaaaaaa"))
 			.and()
-			.clause(c.pxy().getName())
+			.clause(c.proxy().getName())
 			.condition(new NotEquals("aaaaaaaaa"))
 			.executeQuery();
 		
-		found = paramHandler.findBetter(builder, p.pxy().getDescription());
+		found = paramHandler.findBetter(builder, p.proxy().getDescription());
 		Assert.assertTrue(found instanceof ParamField);	
 		
-		found = paramHandler.findBetter(builder, c.pxy().getId());
+		found = paramHandler.findBetter(builder, c.proxy().getId());
 		Assert.assertTrue(found instanceof ParamField);	
 		
 		found = paramHandler.findBetter(builder, new Avg(null));

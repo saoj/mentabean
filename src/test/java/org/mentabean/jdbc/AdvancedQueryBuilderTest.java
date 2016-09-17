@@ -233,45 +233,45 @@ public class AdvancedQueryBuilderTest extends AbstractBeanSessionTest {
 			Alias<Company> c = builder.aliasTo(Company.class, "com");
 			Alias<Post> p = builder.aliasTo(Post.class, "p");
 			Alias<Employee> e2 = builder.aliasTo(Employee.class, "emp2");
-			e2.setReturns(e2.pxy().getNumber());
+			e2.setReturns(e2.proxy().getNumber());
 			
 			Sentence sum = new Sentence(
-					new ParamFunction(new Count(new ParamField(e, e.pxy().getNumber()))))
-					.returnType(DBTypes.LONG).fromProperty(p.pxy().getCompany().getEmployeeCount());
+					new ParamFunction(new Count(new ParamField(e, e.proxy().getNumber()))))
+					.returnType(DBTypes.LONG).fromProperty(p.proxy().getCompany().getEmployeeCount());
 			
 			Query query = builder.select(p, c, e).add(sum)
 			.from(p)
 			
 			.join(c)
-			.on(c.pxy().getId())
-			.eq(p.pxy().getCompany().getId())
-			.and(c.pxy().getNumber())
-			.eq(p.pxy().getCompany().getNumber())
-			.eqProperty(p.pxy().getCompany())
+			.on(c.proxy().getId())
+			.eq(p.proxy().getCompany().getId())
+			.and(c.proxy().getNumber())
+			.eq(p.proxy().getCompany().getNumber())
+			.eqProperty(p.proxy().getCompany())
 			
 			.join(e)
-			.on(e.pxy().getNumber())
-			.eq(p.pxy().getEmployee().getNumber())
-			.and(e.pxy().getCompany().getId())
-			.eq(p.pxy().getCompany().getId())
-			.eqProperty(p.pxy().getEmployee())
-			.and(e.pxy().getCompany().getNumber())
-			.eq(p.pxy().getCompany().getNumber())
+			.on(e.proxy().getNumber())
+			.eq(p.proxy().getEmployee().getNumber())
+			.and(e.proxy().getCompany().getId())
+			.eq(p.proxy().getCompany().getId())
+			.eqProperty(p.proxy().getEmployee())
+			.and(e.proxy().getCompany().getNumber())
+			.eq(p.proxy().getCompany().getNumber())
 			
 			.where()
 			
-			.clauseIf(true, e.pxy().getName())
+			.clauseIf(true, e.proxy().getName())
 				.condition(new Like(new ParamValue("%o"))).and()
-			.clauseIf(false, new Lower(new ParamField(c, c.pxy().getName()))).condition(new Equals(new ParamValue(null))).and()
-			.clauseIf(false, e.pxy().getNumber()).condition(
+			.clauseIf(false, new Lower(new ParamField(c, c.proxy().getName()))).condition(new Equals(new ParamValue(null))).and()
+			.clauseIf(false, e.proxy().getNumber()).condition(
 					new In(new ParamSubQuery(builder.subQuery().select(e2).from(e2)
-							.where().clause(e.pxy().getNumber()).condition(
+							.where().clause(e.proxy().getNumber()).condition(
 									new GreaterThan(new ParamValue(391)))))).and()
 			.clause(new Sentence(builder.subQuery().select(e2).from(e2).limit(1))).condition(new GreaterThan(1))
 			.groupBy()
 			.having().clause(sum).condition(new GreaterThanEquals(1))
 			
-			.orderBy().asc(p, p.pxy().getDescription())
+			.orderBy().asc(p, p.proxy().getDescription())
 			.limit(10);
 			
 			List<Post> list = query.executeQuery();

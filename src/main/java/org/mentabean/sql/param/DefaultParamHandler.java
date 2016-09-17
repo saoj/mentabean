@@ -24,7 +24,7 @@ public class DefaultParamHandler implements ParamHandler {
 			
 			Object proxy = PropertiesProxy.getBeanInstances()[0];
 			for (Alias<?> a : builder.getCreatedAliases()) {
-				if (a.pxy() == proxy) {
+				if (a.proxy() == proxy) {
 					return new ParamField(a, property);
 				}
 			}

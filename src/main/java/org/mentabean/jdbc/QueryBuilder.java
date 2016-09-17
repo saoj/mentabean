@@ -240,7 +240,7 @@ public class QueryBuilder {
 
 		private BeanConfig config;
 		private String aliasStr;
-		private T pxy;
+		private T proxy;
 		private String[] returns;
 		private String[] returnMinus;
 		private Map<Key, Alias> joined = new HashMap<Key, Alias>();
@@ -253,7 +253,7 @@ public class QueryBuilder {
 			if (this.config == null)
 				throw new BeanException("BeanConfig not found for "+clazz);
 			
-			this.pxy = (T) PropertiesProxy.create(config.getBeanClass());
+			this.proxy = (T) PropertiesProxy.create(config.getBeanClass());
 			
 			createdAliases.add(this);
 		}
@@ -279,10 +279,16 @@ public class QueryBuilder {
 		/**
 		 * Returns the proxy for bean class
 		 * @return The proxy
+		 * @deprecated Use {@link #proxy()} instead 
 		 */
 		public T pxy(){
 
-			return pxy;
+			return proxy;
+		}
+		
+		public T proxy(){
+			
+			return proxy;
 		}
 
 		/**

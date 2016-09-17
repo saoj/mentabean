@@ -70,6 +70,18 @@ public class BeanManager {
 	public void addBeanConfig(final BeanConfig bc) {
 		bean(bc);
 	}
+	
+	/**
+	 * Add multiple bean configurations.
+	 * 
+	 * @param bcs
+	 *            Varargs of bean configuration to add.
+	 */
+	public void addBeanConfigs(final BeanConfig... bcs) {
+		for (BeanConfig bc : bcs) {
+			bean(bc);
+		}
+	}
 
 	/**
 	 * Creates a bean configuration and add to this manager.
