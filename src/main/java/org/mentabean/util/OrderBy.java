@@ -10,6 +10,10 @@ public class OrderBy {
 	
 	private final Map<String, SortOrder> fields = new LinkedHashMap<String, SortOrder>();
 	
+	public static OrderBy get() {
+		return new OrderBy();
+	}
+	
 	public OrderBy orderByAsc(String field) {
 		
 		if (field == null) {
@@ -25,6 +29,14 @@ public class OrderBy {
 		return orderByAsc(PropertiesProxy.getPropertyName());
 	}
 	
+	public OrderBy asc(String field) {
+		return orderByAsc(field);
+	}
+	
+	public OrderBy asc(Object field) {
+		return orderByAsc(field);
+	}
+	
 	public OrderBy orderByDesc(String field) {
 		
 		if (field == null) {
@@ -38,6 +50,14 @@ public class OrderBy {
 	
 	public OrderBy orderByDesc(Object field) {
 		return orderByDesc(PropertiesProxy.getPropertyName());
+	}
+	
+	public OrderBy desc(String field) {
+		return orderByDesc(field);
+	}
+	
+	public OrderBy desc(Object field) {
+		return orderByDesc(field);
 	}
 	
 	@Override
