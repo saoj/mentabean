@@ -1,4 +1,4 @@
-package org.mentabean.jdbc.one_to_many_without_join_table;
+package org.mentabean.jdbc.one_to_many;
 
 import static org.junit.Assert.*;
 
@@ -21,11 +21,9 @@ import org.mentabean.util.SQLUtils;
  * 
  * Engine can have zero or more parts (one-to-many relationship)
  * 
- * IMPORTANT: A part can only belong to ONE engine, not multiple. Therefore there's no need for a join table.
- * 
  * @author Sergio Oliveira Jr.
  */
-public class OneToManyWithoutJoinTableTest extends AbstractBeanSessionTest {
+public class OneToManyTest extends AbstractBeanSessionTest {
 	
 	private BeanSession session;
 	

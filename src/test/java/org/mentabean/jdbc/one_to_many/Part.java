@@ -1,4 +1,4 @@
-package org.mentabean.jdbc.one_to_many_without_join_table;
+package org.mentabean.jdbc.one_to_many;
 
 public class Part {
 	
