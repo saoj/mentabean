@@ -172,4 +172,54 @@ public class OneToOneTest extends AbstractBeanSessionTest {
 		// and now of couse the name is there:
 		assertEquals("Patricia", p.getUser().getName());
 	}
+	
+	@Test
+	public void loadByForeignKey() {
+		
+		// here we are assuming (incorrectly, just for testing purposes) that each User can have only one Post
+		// so we will try to load a Post by its FK to User
+		
+		User user1 = new User();
+		user1.setName("Marisa");
+		
+		session.insert(user1);
+		
+		Post post1 = new Post();
+		post1.setTitle("Hi!");
+		post1.setUser(user1);
+		
+		session.insert(post1);
+		
+		User user2 = new User();
+		user2.setName("Renata");
+		
+		session.insert(user2);
+		
+		Post post2 = new Post();
+		post2.setTitle("Hello!");
+		post2.setUser(user2);
+		
+		session.insert(post2);
+		
+		// now load Post1 by its User
+		int userId = post1.getUser().getId();
+		
+		Post p1 = new Post();
+		p1.setUser(new User(userId));
+		
+		// we are not loading by PK here so we MUST use loadUnique to enforce that the user can only have ONE Post...
+		p1 = session.loadUnique(p1);
+		
+		// did we find it?
+		assertEquals(post1.getId(), p1.getId());
+		assertEquals(post1.getTitle(), p1.getTitle());
+		assertEquals(post1.getUser().getId(), p1.getUser().getId());
+		
+		// but because of lazy loading, the User is still NOT populated:
+		assertEquals(null, p1.getUser().getName());
+		
+		// if you want to populate it you need to manually do so...
+		assertEquals(true, session.load(p1.getUser()));
+		assertEquals(user1.getName(), p1.getUser().getName());
+	}
 }
