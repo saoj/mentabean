@@ -126,7 +126,7 @@ try {
 }
 ```
 
-### 10. Write same query above but now using QueryBuilder
+#### 10. Write same query above but now using QueryBuilder
 ```Java
 QueryBuilder builder = beanSession.buildQuery();
 Alias<User> userAlias = builder.aliasTo(User.class);
@@ -145,7 +145,6 @@ List<User> users = builder
 	.executeQuery();
 ```
 Note that in this case you don't have to worry about openning Statements/ResultSets. You just creates and executes your query and it's gives you a list of objects that you want.
-------
 
 For the subsequent recipes, we'll be using the objects below:
 ```Java
