@@ -16,5 +16,12 @@ public class GreaterThan extends SimpleComparison {
 	public String comparisonSignal() {
 		return ">";
 	}
-
+	
+	public static GreaterThan get(Param param) {
+		return new GreaterThan(param);
+	}
+	
+	public static GreaterThan get(Object param) {
+		return new GreaterThan(param);
+	}
 }

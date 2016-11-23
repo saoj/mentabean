@@ -16,6 +16,12 @@ public class Like extends SimpleComparison {
 	public String comparisonSignal() {
 		return "LIKE";
 	}
+	
+	public static Like get(Param param) {
+		return new Like(param);
+	}
 
-
+	public static Like get(Object value) {
+		return new Like(value);
+	}
 }
