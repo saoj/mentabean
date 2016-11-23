@@ -28,11 +28,13 @@ public class User {
 
 #### 1. Mapping an object to a database table
 ```Java
+User user = PropertiesProxy.create(User.class);
 BeanConfig userConfig = new BeanConfig(User.class, "users") // table name is "users"
   .pk(user.getId(), "user_id", DBTypes.AUTOINCREMENT) // "id" maps to "user_id" column
   .field(user.getName(), "username", DBTypes.STRING); // "name" maps to "username" column
 ```
 ```Java
+User user = PropertiesProxy.create(User.class);
 BeanConfig userConfig = new BeanConfig(User.class, "users") // table name is "users"
   .pk(user.getId(), DBTypes.AUTOINCREMENT) // "id" maps to "id" column
   .field(user.getName(), DBTypes.STRING); // "name" maps to "name" column
@@ -231,7 +233,7 @@ if (beanSession.load(post)) {
 }
 ```
 
-#### 12. Load a one-to-many relationship
+#### 12. Loading a one-to-many relationship
 ```Java
 User user = new user(345); // PK
 if (beanSession.load(user)) {
