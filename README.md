@@ -126,6 +126,27 @@ try {
 }
 ```
 
+### 10. Write same query above but now using QueryBuilder
+```Java
+QueryBuilder builder = beanSession.buildQuery();
+Alias<User> userAlias = builder.aliasTo(User.class);
+User user = userAlias.proxy();
+
+List<User> users = builder
+	.selectFrom(userAlias)
+	.where()
+	.clause(user.getName())
+	.condition(new Like("M%"))
+	.and()
+	.clause(user.getId())
+	.condition(new GreaterThan(11))
+	.orderBy()
+	.desc(userAlias, user.getName())
+	.executeQuery();
+```
+Note that in this case you don't have to worry about openning Statements/ResultSets. You just creates and executes your query and it's gives you a list of objects that you want.
+------
+
 For the subsequent recipes, we'll be using the objects below:
 ```Java
 public class User {
@@ -169,7 +190,7 @@ public class Post {
 }
 ```
 
-#### 10. Configuring a one-to-one relationship
+#### 11. Configuring a one-to-one relationship
 ```Java
 User user = PropertiesProxy.create(User.class);
 BeanConfig userConfig = new BeanConfig(User.class, "users")
@@ -183,7 +204,7 @@ BeanConfig postConfig = new BeanConfig(Post.class, "posts")
   .field(post.getUser().getId(), "user_id", DBTypes.INTEGER); // <===== user_id is the FK column linked to the User PK
 ```
 
-#### 11. Loading a one-to-one relationship
+#### 12. Loading a one-to-one relationship
 ```Java
 Post post = new Post(23);
 if (beanSession.load(post)) {
@@ -198,7 +219,7 @@ if (beanSession.load(post)) {
 }
 ```
 
-#### 12. Loading a one-to-many relationship
+#### 13. Loading a one-to-many relationship
 ```Java
 User user = new user(345); // PK
 if (beanSession.load(user)) {
