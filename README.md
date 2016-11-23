@@ -145,7 +145,7 @@ List<User> users = builder
 	.executeQuery();
 ```
 Note that in this case you don't have to worry about openning Statements/ResultSets. You just creates and executes your query and it's gives you a list of objects that you want.
-
+***
 For the subsequent recipes, we'll be using the objects below:
 ```Java
 public class User {
@@ -157,20 +157,10 @@ public class User {
 	public User() { /* mandatory */ }
 
 	public User(int id) {
-      this.id = id;
+		this.id = id;
 	}
 
-	public int getId() { return id; }
-
-	public void setId(int id) { this.id = id; }
-
-	public String getName() { return name; }
-
-	public void setName(String name) { this.name = name; }
-
-	public void setPosts(List<Post> posts) { this.posts = posts; }
-
-	public List<Post> getPosts() { return posts; }
+	// getters and setters
 }
 
 public class Post {
@@ -233,4 +223,6 @@ if (beanSession.load(user)) {
 }
 ```
 
-More recipes coming soon. Please feel free to suggest new ones!
+Please refer to http://mentabean.soliveirajr.com to see a complete MentaBean documentation.
+
+More recipes coming soon. Feel free to suggest new ones!
