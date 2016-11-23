@@ -12,6 +12,10 @@ public class Limit {
 		return x;
 	}
 	
+	public static Limit get(int lim) {
+		return new Limit(lim);
+	}
+	
 	@Override
 	public String toString() {
 		return String.valueOf(x);
