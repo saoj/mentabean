@@ -132,19 +132,22 @@ QueryBuilder builder = beanSession.buildQuery();
 Alias<User> userAlias = builder.aliasTo(User.class);
 User user = userAlias.proxy();
 
+// Note that in this case you don't have to worry about opening Statements/ResultSets.
+// You just create and execute your query and it gives you the list of objects that you want.
+
 List<User> users = builder
 	.selectFrom(userAlias)
 	.where()
 	.clause(user.getName())
-	.condition(new Like("M%"))
+	.condition(Like.get("M%"))
 	.and()
 	.clause(user.getId())
-	.condition(new GreaterThan(11))
+	.condition(GreaterThan.get(11))
 	.orderBy()
 	.desc(userAlias, user.getName())
 	.executeQuery();
 ```
-Note that in this case you don't have to worry about openning Statements/ResultSets. You just creates and executes your query and it's gives you a list of objects that you want.
+
 ***
 For the subsequent recipes, we'll be using the objects below:
 ```Java
@@ -223,6 +226,7 @@ if (beanSession.load(user)) {
 }
 ```
 
-Please refer to http://mentabean.soliveirajr.com to see a complete MentaBean documentation.
-
 More recipes coming soon. Feel free to suggest new ones!
+
+For now, please refer to http://mentabean.soliveirajr.com to see the complete MentaBean documentation.
+
