@@ -29,13 +29,13 @@ public class User {
 #### 1. Mapping an object to a database table
 ```Java
 BeanConfig userConfig = new BeanConfig(User.class, "users") // table name is "users"
-    .pk(user.getId(), "user_id", DBTypes.AUTOINCREMENT) // id maps to user_id column
-    .field(user.getName(), "username", DBTypes.STRING); // name maps to username column
+  .pk(user.getId(), "user_id", DBTypes.AUTOINCREMENT) // "id" maps to "user_id" column
+  .field(user.getName(), "username", DBTypes.STRING); // "name" maps to "username" column
 ```
 ```Java
 BeanConfig userConfig = new BeanConfig(User.class, "users") // table name is "users"
-    .pk(user.getId(), DBTypes.AUTOINCREMENT) // id maps to id column
-    .field(user.getName(), DBTypes.STRING); // name maps to name column
+  .pk(user.getId(), DBTypes.AUTOINCREMENT) // "id" maps to "id" column
+  .field(user.getName(), DBTypes.STRING); // "name" maps to "name" column
 ```
 #### 2. Loading an object by its PK
 ```Java
@@ -113,7 +113,8 @@ try {
     sql.append("select ");
     sql.append(userAlias.columns());
     sql.append(" from ").append(userAlias.tableName());
-    sql.append(" where ").column(user.getName()).append(" like ? and ").column(user.getId()).append(" > ?").append(" order by ").column(user.getName()).append(" desc");
+    sql.append(" where ").column(user.getName()).append(" like ? and ").column(user.getId())
+		  .append(" > ?").append(" order by ").column(user.getName()).append(" desc");
 
     stmt = SQLUtils.prepare(conn, sql.toString(), "M%", 11); // varargs for params
 
@@ -204,15 +205,15 @@ public class Post {
 User user = PropertiesProxy.create(User.class);
 
 BeanConfig userConfig = new BeanConfig(User.class, "users")
-	.pk(user.getId(), DBTypes.AUTOINCREMENT)
-	.field(user.getName(), DBTypes.STRING);
+  .pk(user.getId(), DBTypes.AUTOINCREMENT)
+  .field(user.getName(), DBTypes.STRING);
 
 Post post = PropertiesProxy.create(Post.class);
 
 BeanConfig postConfig = new BeanConfig(Post.class, "posts")
-	.pk(post.getId(), DBTypes.AUTOINCREMENT)
-	.field(post.getTitle(), DBTypes.STRING)
-	.field(post.getUser().getId(), "user_id", DBTypes.INTEGER); // <===== user_id is the FK column linked to the User PK
+  .pk(post.getId(), DBTypes.AUTOINCREMENT)
+  .field(post.getTitle(), DBTypes.STRING)
+  .field(post.getUser().getId(), "user_id", DBTypes.INTEGER); // <===== user_id is the FK column linked to the User PK
 ```
 
 #### 11. Loading a one-to-one relationship
