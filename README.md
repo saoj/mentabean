@@ -24,8 +24,8 @@ public class User {
 ```Java
 User user = PropertiesProxy.create(User.class);
 BeanConfig userConfig = new BeanConfig(User.class, "users") // table name is "users"
-  .pk(user.getId(), "user_id", DBTypes.AUTOINCREMENT) // "id" maps to "user_id" column
-  .field(user.getName(), "username", DBTypes.STRING); // "name" maps to "name" column
+  .pk(user.getId(), "user_id", DBTypes.AUTOINCREMENT) // "id" property maps to "user_id" column
+  .field(user.getName(), "username", DBTypes.STRING); // "name" property maps to "username" column
 ```
 
 #### 2. Loading an object by its PK
@@ -51,7 +51,7 @@ System.out.println("Inserted new user in the database with id: " + user.getId())
 #### 4. Updating an object
 ```Java
 User user = new User(123);
-if (beanSession.load(user)) {
+if (beanSession.load(user)) { // always a good practice to update a loaded object
 	user.setName("Julia"); // changing the name to something else...
 	int rows = beanSession.update(user);
 	System.out.println("Rows updated: " + rows); // should be 1 unless the name was already "Julia"
@@ -60,12 +60,9 @@ if (beanSession.load(user)) {
 
 #### 5. Deleting an object
 ```Java
-User user = new User(234);
-if (beanSession.load(user)) {
-	boolean wasDeleted = beanSession.delete(user);
-	if (wasDeleted) {
-		System.out.println("User deleted: " + user.getId());
-	}
+User user = new User(234); // you can only delete with a PK
+if (beanSession.delete(user)) { // no need to load when deleting by PK
+	System.out.println("User was deleted: " + user.getId());
 }
 ```
 #### 6. Loading list of objects
@@ -133,7 +130,7 @@ Alias<User> userAlias = builder.aliasTo(User.class);
 User user = userAlias.proxy();
 
 // Note that in this case you don't have to worry about opening Statements/ResultSets.
-// You just create and execute your query and it gives you the list of objects that you want.
+// You just create and execute your query and it gives you the list of objects you want.
 
 List<User> users = builder
 	.selectFrom(userAlias)
@@ -186,13 +183,13 @@ public class Post {
 ```Java
 User user = PropertiesProxy.create(User.class);
 BeanConfig userConfig = new BeanConfig(User.class, "users")
-  .pk(user.getId(), DBTypes.AUTOINCREMENT)
-  .field(user.getName(), DBTypes.STRING);
+  .pk(user.getId(), DBTypes.AUTOINCREMENT) // "id" property maps to "id" column
+  .field(user.getName(), DBTypes.STRING); // "name" property maps to "name" column
 
 Post post = PropertiesProxy.create(Post.class);
 BeanConfig postConfig = new BeanConfig(Post.class, "posts")
-  .pk(post.getId(), DBTypes.AUTOINCREMENT)
-  .field(post.getTitle(), DBTypes.STRING)
+  .pk(post.getId(), DBTypes.AUTOINCREMENT) // "id" property maps to "id" column
+  .field(post.getTitle(), DBTypes.STRING) // "title" property maps to "title" column
   .field(post.getUser().getId(), "user_id", DBTypes.INTEGER); // <===== user_id is the FK column linked to the User PK
 ```
 
@@ -204,7 +201,8 @@ if (beanSession.load(post)) {
 	System.out.println("User NAME from post: " + post.getUser().getName()); // prints null
 
 	// MentaBean always uses lazy-loading for dependencies
-	// force the dependency to be loaded
+	// When you need, you load the dependency yourself
+	// note that manual lazy loading of dependencies is a conscious implementation decision
 	beanSession.load(post.getUser());
 
 	System.out.println("User NAME from post: " + post.getUser().getName()); // now good!
@@ -217,9 +215,12 @@ User user = new user(345); // PK
 if (beanSession.load(user)) {
 	System.out.println("Posts: " + user.getPosts()); // prints null (remember lazy-loading)
 
+	// MentaBean always uses lazy-loading for dependencies
+	// When you need, you load the dependency yourself
+	// note that manual lazy loading of dependencies is a conscious implementation decision
 	Post post = new Post();
 	post.setUser(user);
-	List<Post> posts = beanSession.loadList(post);
+	List<Post> posts = beanSession.loadList(post); // load all posts for this user
 	user.setPosts(posts);
 
 	System.out.println("Posts: " + user.getPosts()); // now good!
@@ -229,4 +230,3 @@ if (beanSession.load(user)) {
 More recipes coming soon. Feel free to suggest new ones!
 
 For now, please refer to http://mentabean.soliveirajr.com to see the complete MentaBean documentation.
-
