@@ -1,16 +1,18 @@
 package org.mentabean.jdbc;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mentabean.BeanConfig;
+import org.mentabean.BeanException;
 import org.mentabean.BeanManager;
 import org.mentabean.BeanSession;
 import org.mentabean.DBTypes;
 import org.mentabean.util.PropertiesProxy;
 import org.mentabean.util.SQLUtils;
-
-import static org.junit.Assert.*;
 
 public class DeleteWithoutLoadTest extends AbstractBeanSessionTest {
 	
@@ -95,5 +97,20 @@ public class DeleteWithoutLoadTest extends AbstractBeanSessionTest {
 		
 		u = new User(user.getId());
 		assertFalse(session.load(u)); // was deleted!
+	}
+	
+	@Test(expected = BeanException.class)
+	public void testDeleteWithoutPK() {
+		
+		User user = new User();
+		user.setName("Sergio");
+		session.insert(user);
+		
+		assertTrue(user.getId() > 0);
+		
+		User u = new User();
+		u.setName("Sergio");
+		
+		session.delete(u); // you can't do that because there is no PK (load first)
 	}
 }
