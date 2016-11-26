@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mentabean.BeanConfig;
 import org.mentabean.BeanManager;
 import org.mentabean.BeanSession;
 import org.mentabean.DBTypes;
@@ -57,12 +56,10 @@ public class UpdateTest extends AbstractBeanSessionTest {
 		
 		User user = PropertiesProxy.create(User.class);
 		
-		BeanConfig userConfig = new BeanConfig(User.class, "users")
+		beanManager.bean(User.class, "users")
 			.pk(user.getId(), DBTypes.AUTOINCREMENT)
 			.field(user.getName(), DBTypes.STRING)
 			.field(user.getAge(), DBTypes.INTEGER);
-		
-		beanManager.addBeanConfig(userConfig);
 		
 		return beanManager;
 	}

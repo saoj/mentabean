@@ -23,7 +23,7 @@ public class User {
 #### 1. Mapping an object to a database table
 ```Java
 User user = PropertiesProxy.create(User.class);
-BeanConfig userConfig = new BeanConfig(User.class, "users") // table name is "users"
+beanManager.bean(User.class, "users") // table name is "users"
   .pk(user.getId(), "user_id", DBTypes.AUTOINCREMENT) // "id" property maps to "user_id" column
   .field(user.getName(), "username", DBTypes.STRING); // "name" property maps to "username" column
 ```
@@ -183,12 +183,12 @@ public class Post {
 #### 11. Configuring a one-to-one relationship
 ```Java
 User user = PropertiesProxy.create(User.class);
-BeanConfig userConfig = new BeanConfig(User.class, "users")
+beanManager.bean(User.class, "users")
   .pk(user.getId(), DBTypes.AUTOINCREMENT) // "id" property maps to "id" column
   .field(user.getName(), DBTypes.STRING); // "name" property maps to "name" column
 
 Post post = PropertiesProxy.create(Post.class);
-BeanConfig postConfig = new BeanConfig(Post.class, "posts")
+beanManager.bean(Post.class, "posts")
   .pk(post.getId(), DBTypes.AUTOINCREMENT) // "id" property maps to "id" column
   .field(post.getTitle(), DBTypes.STRING) // "title" property maps to "title" column
   .field(post.getUser().getId(), "user_id", DBTypes.INTEGER); // <===== user_id is the FK column linked to the User PK
