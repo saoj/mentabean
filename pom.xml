@@ -7,7 +7,7 @@
 	</parent>
 	<groupId>me.soliveirajr</groupId>
 	<artifactId>menta-bean</artifactId>
-	<version>2.3.1</version>
+	<version>2.3.2-SNAPSHOT</version>
 	<name>MentaBean</name>
 	<description>An query helper and simple CRUD ORM.</description>
 	<url>http://maven.apache.org</url>
