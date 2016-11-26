@@ -80,7 +80,7 @@ public class UpdateTest extends AbstractBeanSessionTest {
 		User u = new User(user.getId()); // update by PK
 		u.setName("Julia"); // change name...
 		
-		assertTrue(session.update(u) == 1); // update without load...
+		assertTrue(session.update(u)); // update without load...
 		
 		u = new User(user.getId());
 		
@@ -104,7 +104,7 @@ public class UpdateTest extends AbstractBeanSessionTest {
 		u.setName("Julia"); // change name...
 		u.setAge(32);
 		
-		assertTrue(session.update(u) == 1); // update without load...
+		assertTrue(session.update(u)); // update without load...
 		
 		u = new User(user.getId());
 		
@@ -129,7 +129,7 @@ public class UpdateTest extends AbstractBeanSessionTest {
 		
 		User userProxy = PropertiesProxy.create(User.class);
 		
-		assertTrue(session.update(u, userProxy.getAge()) == 1); // update without load...
+		assertTrue(session.update(u, userProxy.getAge())); // update without load...
 		
 		u = new User(user.getId());
 		
@@ -154,7 +154,7 @@ public class UpdateTest extends AbstractBeanSessionTest {
 		
 		User userProxy = PropertiesProxy.create(User.class);
 		
-		assertTrue(session.update(u, userProxy.getName()) == 1); // update without load...
+		assertTrue(session.update(u, userProxy.getName())); // update without load...
 		
 		u = new User(user.getId());
 		
@@ -177,7 +177,7 @@ public class UpdateTest extends AbstractBeanSessionTest {
 		User u = new User(user.getId()); // update by PK
 		u.setAge(22); // change age...
 		
-		assertTrue(session.updateAll(u) == 1); // updateAll without load...
+		assertTrue(session.updateAll(u)); // updateAll without load...
 		
 		u = new User(user.getId());
 		

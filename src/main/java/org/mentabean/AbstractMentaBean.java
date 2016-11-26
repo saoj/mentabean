@@ -65,12 +65,12 @@ public abstract class AbstractMentaBean implements MentaBean {
 
 	@Override
 	public boolean update() {
-		return session.update(this) == 1;
+		return session.update(this);
 	}
 
 	@Override
 	public boolean updateAll() {
-		return session.updateAll(this) == 1;
+		return session.updateAll(this);
 	}
 
 	@Override

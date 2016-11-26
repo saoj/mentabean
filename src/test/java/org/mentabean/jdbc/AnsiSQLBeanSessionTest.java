@@ -212,9 +212,9 @@ public class AnsiSQLBeanSessionTest extends AbstractBeanSessionTest {
 
 			u.setUsername("soliveira");
 
-			int modified = session.update(u);
+			boolean modified = session.update(u);
 
-			Assert.assertEquals(1, modified);
+			Assert.assertEquals(true, modified);
 
 			Assert.assertEquals(1, u.getId());
 			Assert.assertEquals("soliveira", u.getUsername());
@@ -292,10 +292,10 @@ public class AnsiSQLBeanSessionTest extends AbstractBeanSessionTest {
 								// it was NOT attached to session
 			u.setUsername("soliveira");
 
-			int modified = session.update(u); // only properties that are
+			boolean modified = session.update(u); // only properties that are
 												// considered SET will be
 												// updated
-			Assert.assertEquals(1, modified);
+			Assert.assertEquals(true, modified);
 
 			// make sure it was written to the database
 			u = new User(1);
@@ -314,7 +314,7 @@ public class AnsiSQLBeanSessionTest extends AbstractBeanSessionTest {
 											// changing...
 
 			modified = session.update(u); // nothing should happen here...
-			Assert.assertEquals(0, modified);
+			Assert.assertEquals(false, modified);
 
 			// UNATTACHED UPDATED ALL:
 
@@ -324,7 +324,7 @@ public class AnsiSQLBeanSessionTest extends AbstractBeanSessionTest {
 
 			modified = session.updateAll(u);
 
-			Assert.assertEquals(1, modified);
+			Assert.assertEquals(true, modified);
 
 			// everything was written to the database, even the fields that were
 			// NOT set
@@ -347,7 +347,7 @@ public class AnsiSQLBeanSessionTest extends AbstractBeanSessionTest {
 
 			modified = session.updateAll(u);
 
-			Assert.assertEquals(1, modified);
+			Assert.assertEquals(true, modified);
 
 			// everything was written to the database, even the fields that were
 			// NOT set
@@ -429,8 +429,8 @@ public class AnsiSQLBeanSessionTest extends AbstractBeanSessionTest {
 			boolean loaded = session.load(u);
 			Assert.assertEquals(true, loaded);
 			u.setStatus(User.Status.GOLD);
-			int modified = session.update(u);
-			Assert.assertEquals(1, modified);
+			boolean modified = session.update(u);
+			Assert.assertEquals(true, modified);
 
 			// first count to see if we are excluding the golad...
 
@@ -1150,8 +1150,8 @@ public class AnsiSQLBeanSessionTest extends AbstractBeanSessionTest {
 
 			// delete "saoj" by making deleted equals to false
 			saoj.setDeleted(true);
-			int modified = session.update(saoj);
-			Assert.assertEquals(1, modified);
+			boolean modified = session.update(saoj);
+			Assert.assertEquals(true, modified);
 
 			// load all non-deleted users...
 			User u = new User();

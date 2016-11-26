@@ -261,12 +261,12 @@ public class UpdateDiffTest extends AbstractBeanSessionTest {
 			assertNotNull(clone.getGroup());
 			assertEquals(2, clone.getGroup().getId());
 
-			int updated = session.updateDiff(clone, ralph);
-			assertEquals(0, updated);
+			boolean updated = session.updateDiff(clone, ralph);
+			assertEquals(false, updated);
 
 			clone.setGroup(null);
 			updated = session.updateDiff(clone, ralph);
-			assertEquals(1, updated);
+			assertEquals(true, updated);
 			clone = session.createBasicInstance(clone);
 			session.load(clone);
 			assertNull(clone.getGroup());
@@ -276,7 +276,7 @@ public class UpdateDiffTest extends AbstractBeanSessionTest {
 			User old = (User) clone.clone();
 			clone.setGroup(g3);
 			updated = session.updateDiff(clone, old);
-			assertEquals(1, updated);
+			assertEquals(true, updated);
 			clone = session.createBasicInstance(clone);
 			session.load(clone);
 			assertNotNull(clone.getGroup());
@@ -287,7 +287,7 @@ public class UpdateDiffTest extends AbstractBeanSessionTest {
 			clone.setAge(0);
 			clone.setActive(true);
 			updated = session.updateDiff(clone, old);
-			assertEquals(1, updated);
+			assertEquals(true, updated);
 			clone = session.createBasicInstance(clone);
 			session.load(clone);
 			assertNull(clone.getGroup());
@@ -297,7 +297,7 @@ public class UpdateDiffTest extends AbstractBeanSessionTest {
 			old = (User) clone.clone();
 			clone.setAge(null);
 			updated = session.updateDiff(clone, old);
-			assertEquals(1, updated);
+			assertEquals(true, updated);
 			clone = session.loadUnique(clone);
 			assertNull(clone.getAge());
 
@@ -305,7 +305,7 @@ public class UpdateDiffTest extends AbstractBeanSessionTest {
 			clone.setAge(10);
 			clone.setActive(false);
 			updated = session.updateDiff(clone, old);
-			assertEquals(1, updated);
+			assertEquals(true, updated);
 			clone = session.createBasicInstance(clone);
 			session.load(clone);
 			assertEquals(new Integer(10), clone.getAge());

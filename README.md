@@ -53,8 +53,9 @@ System.out.println("Inserted new user in the database with id: " + user.getId())
 User user = new User(123);
 if (beanSession.load(user)) { // always a good practice to update a loaded object
 	user.setName("Julia"); // changing the name to something else...
-	int rows = beanSession.update(user);
-	System.out.println("Rows updated: " + rows); // should be 1 unless the name was already "Julia"
+	if (beanSession.update(user)) {
+		System.out.println("Rows updated: " + rows); // should be 1 unless the name was already "Julia"
+	}
 }
 ```
 

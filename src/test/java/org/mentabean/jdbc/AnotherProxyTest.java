@@ -206,7 +206,7 @@ public class AnotherProxyTest extends AbstractBeanSessionTest {
 			assertEquals(2, nullProps.size());
 			assertEquals("active", nullProps.get(0));
 			assertEquals("age", nullProps.get(1));
-			assertEquals(1, session.updateDiff(c1, c2));
+			assertEquals(true, session.updateDiff(c1, c2));
 			Customer db = session.loadUnique(new Customer(c1.getCode()));
 			assertEquals(null, db.getActive());
 			assertEquals(0, db.getAge());
@@ -226,7 +226,7 @@ public class AnotherProxyTest extends AbstractBeanSessionTest {
 			assertNull(merged.getActive());
 			assertEquals(20, merged.getAge());
 			assertEquals(0, nullProps.size());
-			assertEquals(1, session.updateDiff(c1, c2));
+			assertEquals(true, session.updateDiff(c1, c2));
 			
 			c1 = new Customer(1, "John", true);
 			c1.setAge(20);

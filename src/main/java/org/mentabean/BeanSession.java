@@ -70,7 +70,7 @@ public interface BeanSession {
 	 * 			  Database columns that will be forced to null if the bean property is not set
 	 * @return 1 if update was successful, 0 if the update did not happen or was not necessary
 	 */
-	public int update(Object bean, Object... forceNull);
+	public boolean update(Object bean, Object... forceNull);
 
 	/**
 	 * Same as update(bean) but here you can turn off the default dynamic update behavior and force all bean properties to be updated regardless whether they have been modified or not.
@@ -79,7 +79,7 @@ public interface BeanSession {
 	 * @return the number of rows that were updated
 	 * @throws Exception
 	 */
-	public int updateAll(Object bean);
+	public boolean updateAll(Object bean);
 	
 	/**
 	 * Updates an object using only the differences between newBean and oldBean instances. 
@@ -88,7 +88,7 @@ public interface BeanSession {
 	 * @param oldBean
 	 * @return 1 if update was successful, 0 if the update did not happen or was not necessary (when bean instances have no differences)
 	 */
-	public <E> int updateDiff(E newBean, E oldBean);
+	public <E> boolean updateDiff(E newBean, E oldBean);
 
 	/**
 	 * Insert the bean in the database.

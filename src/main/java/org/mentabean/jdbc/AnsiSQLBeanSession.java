@@ -1303,18 +1303,18 @@ public class AnsiSQLBeanSession implements BeanSession {
 	}
 
 	@Override
-	public int update(final Object bean, Object... forceNull) {
+	public boolean update(final Object bean, Object... forceNull) {
 
 		return update(bean, true, getProperties(forceNull));
 	}
 
 	@Override
-	public int updateAll(final Object bean) {
+	public boolean updateAll(final Object bean) {
 
 		return update(bean, false, null);
 	}
 
-	private int update(final Object bean, final boolean dynUpdate, String[] nullProps) {
+	private boolean update(final Object bean, final boolean dynUpdate, String[] nullProps) {
 
 		final Map<String, Value> fieldsLoaded = loaded.get(bean);
 
@@ -1462,7 +1462,7 @@ public class AnsiSQLBeanSession implements BeanSession {
 		}
 
 		if (count == 0) {
-			return 0;
+			return false;
 		}
 
 		sb.append(" WHERE ");
@@ -1550,7 +1550,7 @@ public class AnsiSQLBeanSession implements BeanSession {
 			}
 
 			if (x == 0) {
-				return 0;
+				return false;
 			}
 
 			if (fieldsLoaded != null) {
@@ -1575,7 +1575,7 @@ public class AnsiSQLBeanSession implements BeanSession {
 			
 			dispatchAfterUpdate(bean);
 
-			return 1;
+			return true;
 
 		} catch (Exception e) {
 
@@ -1617,13 +1617,13 @@ public class AnsiSQLBeanSession implements BeanSession {
 	}
 	
 	@Override
-	public <E> int updateDiff(E newBean, E oldBean) {
+	public <E> boolean updateDiff(E newBean, E oldBean) {
 		
 		List<String> nullProps = new LinkedList<String>();
 		
 		E diff = compareDifferences(newBean, oldBean, nullProps);
 		
-		return diff == null ? 0 : update(diff, nullProps.toArray());
+		return diff == null ? false : update(diff, nullProps.toArray());
 	}
 	
 	@Override
