@@ -16,7 +16,6 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mentabean.BeanConfig;
 import org.mentabean.BeanException;
 import org.mentabean.BeanManager;
 import org.mentabean.BeanSession;
@@ -254,37 +253,32 @@ public class QueryBuilderTest extends AbstractBeanSessionTest {
 		BeanManager manager = new BeanManager();
 		
 		Company comPxy = PropertiesProxy.create(Company.class);
-		BeanConfig comConf = new BeanConfig(Company.class, "company")
+		manager.bean(Company.class, "company")
 		.pk(comPxy.getId(), "idcompany", DBTypes.STRING)
 		.field(comPxy.getCity().getCode(), "c_code", DBTypes.INTEGER)
 		.field(comPxy.getName(), DBTypes.STRING);
-		manager.addBeanConfig(comConf);
 		
 		Employee empPxy = PropertiesProxy.create(Employee.class);
-		BeanConfig employeeConf = new BeanConfig(Employee.class, "employee")
+		manager.bean(Employee.class, "employee")
 		.pk(empPxy.getNumber(), "idemployee", DBTypes.LONG)
 		.field(empPxy.getName(), DBTypes.STRING)
 		.field(empPxy.getSalary(), DBTypes.DOUBLE);
-		manager.addBeanConfig(employeeConf);
 		
 		Post postPxy = PropertiesProxy.create(Post.class);
-		BeanConfig postConf = new BeanConfig(Post.class, "post")
+		manager.bean(Post.class, "post")
 		.pk(postPxy.getEmployee().getNumber(), "idemployee", DBTypes.LONG)
 		.pk(postPxy.getCompany().getId(), "idcompany", DBTypes.STRING)
 		.field(postPxy.getDescription(), DBTypes.STRING);
-		manager.addBeanConfig(postConf);
 		
 		City cityPxy = PropertiesProxy.create(City.class);
-		BeanConfig cityConf = new BeanConfig(City.class, "cities")
+		manager.bean(City.class, "cities")
 		.pk(cityPxy.getCode(), "city_code", DBTypes.INTEGER)
 		.field(cityPxy.getCountry().getName(), "country_name", DBTypes.STRING)
 		.field(cityPxy.getName(), "city_name", DBTypes.STRING);
-		manager.addBeanConfig(cityConf);
 		
 		Country countryPxy = PropertiesProxy.create(Country.class);
-		BeanConfig countryConf = new BeanConfig(Country.class, "countries")
+		manager.bean(Country.class, "countries")
 		.pk(countryPxy.getName(), "country_ident", DBTypes.STRING);
-		manager.addBeanConfig(countryConf);
 		
 		return manager;
 		

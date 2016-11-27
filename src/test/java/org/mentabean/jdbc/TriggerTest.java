@@ -12,7 +12,6 @@ import java.sql.PreparedStatement;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.mentabean.BeanConfig;
 import org.mentabean.BeanManager;
 import org.mentabean.BeanSession;
 import org.mentabean.DBTypes;
@@ -101,15 +100,14 @@ public class TriggerTest extends AbstractBeanSessionTest {
 		BeanManager beanManager = new BeanManager();
 
 		Customer customerProxy = PropertiesProxy.create(Customer.class);
-		BeanConfig customerConfig = new BeanConfig(Customer.class, "customers")
+		beanManager.bean(Customer.class, "customers")
 			.pk(customerProxy.getCode(), "idcustomers", DBTypes.AUTOINCREMENT)
 			.field(customerProxy.getName(), "name_db", DBTypes.STRING)
 			.field(customerProxy.getActive(), "active_db", DBTypes.BOOLEAN)
 			.field(customerProxy.getHeight(), "height_db", DBTypes.BIGDECIMAL)
 			.field(customerProxy.getPicture(), "picture_db", DBTypes.BYTE_ARRAY)
-			.field(customerProxy.getAge(), "age_db", DBTypes.INTEGER);
-		
-		customerConfig.trigger(new TriggerAdapter() {
+			.field(customerProxy.getAge(), "age_db", DBTypes.INTEGER)
+			.trigger(new TriggerAdapter() {
 			
 			@Override
 			public void beforeInsert(TriggerEvent evt) {
@@ -127,9 +125,6 @@ public class TriggerTest extends AbstractBeanSessionTest {
 			
 		});
 			
-		//add configurations in beanManager
-		beanManager.addBeanConfig(customerConfig);
-		
 		return beanManager;
 	}
 	

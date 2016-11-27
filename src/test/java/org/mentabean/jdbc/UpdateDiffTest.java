@@ -194,19 +194,17 @@ public class UpdateDiffTest extends AbstractBeanSessionTest {
 		BeanManager manager = new BeanManager();
 
 		User userProxy = PropertiesProxy.create(User.class);
-		BeanConfig userCfg = new BeanConfig(User.class, "users")
+		manager.bean(User.class, "users")
 		.pk(userProxy.getId(), DBTypes.AUTOINCREMENT)
 		.field(userProxy.getGroup().getId(), "idgroups", DBTypes.INTEGER)
 		.field(userProxy.getName(), DBTypes.STRING.size(0))
 		.field(userProxy.getAge(), DBTypes.INTEGER)
 		.field(userProxy.isActive(), DBTypes.BOOLEAN);
-		manager.addBeanConfig(userCfg);
 
 		Group groupProxy = PropertiesProxy.create(Group.class);
-		BeanConfig groupCfg = new BeanConfig(Group.class, "groups")
+		manager.bean(Group.class, "groups")
 		.pk(groupProxy.getId(), DBTypes.AUTOINCREMENT)
 		.field(groupProxy.getName(), DBTypes.STRING.size(0));
-		manager.addBeanConfig(groupCfg);
 
 		return manager;
 	}
