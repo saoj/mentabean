@@ -80,7 +80,6 @@ public class QueryBuilder {
 	 * @param as - Alias with properties that will be retrieved
 	 * @return A new <code>From</code> object
 	 * @see #select(Alias...)
-	 * @see Select#from(Alias)
 	 */
 	public From selectFrom(Alias<?> as){
 		
@@ -641,8 +640,8 @@ public class QueryBuilder {
 		}
 		
 		/**
-		 * Defines the property of foreign bean <b>(specified on {@link UsingPK#in(Alias)} method)</b> 
-		 * that will receive the value from alias PK <b>(specified on {@link On#pkOf(Alias)} method)</b> and
+		 * Defines the property of foreign bean (specified on {@code in(Alias)} method) 
+		 * that will receive the value from alias PK (specified on {@code pkOf(Alias)} method) and
 		 * force the creation of a new instance if bean property is not set.
 		 * <br><br>
 		 * <b>E.g.:</b>
@@ -658,7 +657,6 @@ public class QueryBuilder {
 		 * </ul>
 		 * @param propertyBean
 		 * @return this
-		 * @see Alias#put(Object, boolean, Alias)
 		 */
 		public From inPropertyForcingInstance(Object propertyBean) {
 			aliasFK.put(propertyBean, true, aliasPK);
@@ -666,8 +664,8 @@ public class QueryBuilder {
 		}
 		
 		/**
-		 * Defines the property of foreign bean <b>(specified on {@link UsingPK#in(Alias)} method)</b> 
-		 * that will receive the value from alias PK <b>(specified on {@link On#pkOf(Alias)} method)</b>
+		 * Defines the property of foreign bean (specified on {@code in(Alias)} method) 
+		 * that will receive the value from alias PK (specified on {@code pkOf(Alias)} method)
 		 * <br><br>
 		 * <b>E.g.:</b>
 		 * <ul>
@@ -682,7 +680,6 @@ public class QueryBuilder {
 		 * </ul>
 		 * @param propertyBean
 		 * @return this
-		 * @see Alias#put(Object, boolean, Alias)
 		 */
 		public From inProperty(Object propertyBean) {
 			aliasFK.put(propertyBean, false, aliasPK);
@@ -690,8 +687,8 @@ public class QueryBuilder {
 		}
 		
 		/**
-		 * Defines the property of primary bean <b>(specified on {@link On#pkOf(Alias)} method)</b> 
-		 * that will receive the value from foreign alias (aliasFK) <b>(specified on {@link UsingPK#in(Alias)} method)</b> and
+		 * Defines the property of primary bean (specified on {@code pkOf(Alias)} method) 
+		 * that will receive the value from foreign alias (aliasFK) (specified on {@code in(Alias)} method) and
 		 * force the creation of a new instance if bean property is not set.
 		 * <br><br><b>Note: </b>The <b>pkProperty</b> is generally used in 1x1 relationship.
 		 * <br><br>
@@ -708,7 +705,6 @@ public class QueryBuilder {
 		 * </ul>
 		 * @param propertyBean
 		 * @return this
-		 * @see Alias#put(Object, boolean, Alias)
 		 */
 		public From pkPropertyForcingInstance(Object propertyBean) {
 			aliasPK.put(propertyBean, true, aliasFK);
@@ -716,8 +712,8 @@ public class QueryBuilder {
 		}
 		
 		/**
-		 * Defines the property of primary bean <b>(specified on {@link On#pkOf(Alias)} method)</b> 
-		 * that will receive the value from foreign alias (aliasFK) <b>(specified on {@link UsingPK#in(Alias)} method)</b>
+		 * Defines the property of primary bean (specified on {@code pkOf(Alias)} method) 
+		 * that will receive the value from foreign alias (aliasFK) (specified on {@code in(Alias)} method)
 		 * <br><br><b>Note: </b>The <b>pkProperty</b> is generally used in 1x1 relationship.
 		 * <br><br>
 		 * <b>E.g.:</b>
@@ -733,7 +729,6 @@ public class QueryBuilder {
 		 * </ul>
 		 * @param propertyBean
 		 * @return this
-		 * @see Alias#put(Object, boolean, Alias)
 		 */
 		public From pkProperty(Object propertyBean) {
 			aliasPK.put(propertyBean, false, aliasFK);
@@ -787,8 +782,8 @@ public class QueryBuilder {
 		}
 		
 		/**
-		 * Defines the property of bean <b>specified as alias on {@link OnEquals#eq(Alias, Object)} method</b> 
-		 * that will receive the value from alias <b>specified on {@link From#join(Alias)} method</b> and
+		 * Defines the property of bean specified as alias on {@code eq(Alias, Object)} method 
+		 * that will receive the value from alias specified on {@code join(Alias)} method and
 		 * force the creation of a new instance if bean property is not set.
 		 * <br><br>
 		 * <b>E.g.:</b>
@@ -805,7 +800,6 @@ public class QueryBuilder {
 		 * </ul>
 		 * @param propertyBean
 		 * @return this
-		 * @see Alias#put(Object, boolean, Alias)
 		 */
 		public Equals eqPropertyForcingInstance(Object propertyBean) {
 			aliasFK.put(propertyBean, true, aliasPK);
@@ -813,8 +807,8 @@ public class QueryBuilder {
 		}
 		
 		/**
-		 * Defines the property of bean <b>specified as alias on {@link OnEquals#eq(Alias, Object)} method</b> 
-		 * that will receive the value from alias <b>specified on {@link From#join(Alias)} method</b>
+		 * Defines the property of bean specified as alias on {@code eq(Alias, Object)} method 
+		 * that will receive the value from alias specified on {@code join(Alias)} method
 		 * <br><br>
 		 * <b>E.g.:</b>
 		 * <ul>
@@ -830,7 +824,6 @@ public class QueryBuilder {
 		 * </ul>
 		 * @param propertyBean
 		 * @return this
-		 * @see Alias#put(Object, boolean, Alias)
 		 */
 		public Equals eqProperty(Object propertyBean) {
 			aliasFK.put(propertyBean, false, aliasPK);
@@ -1439,7 +1432,7 @@ public class QueryBuilder {
 		 * Insert the param as a clause in query if and only if the flag <b>clauseIf</b> is <b>true</b>
 		 * @param clauseIf - Flag indicating if this clause will be inserted in SQL query
 		 * @param param
-		 * @see #clause(Param)
+		 * @see #clause(Object)
 		 */
 		public T clauseIf(boolean clauseIf, Object param);
 		
