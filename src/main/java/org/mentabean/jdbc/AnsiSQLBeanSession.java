@@ -2533,6 +2533,7 @@ public class AnsiSQLBeanSession implements BeanSession {
 //		throw new IllegalStateException("Cannot get size from type: " + dbType);
 //	}
 	
+	@Override
 	public BeanConfig getConfigFor(Class<? extends Object> clazz) {
 		return beanManager.getBeanConfig(clazz);
 	}

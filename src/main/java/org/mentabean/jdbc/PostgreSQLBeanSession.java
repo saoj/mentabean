@@ -176,6 +176,7 @@ public class PostgreSQLBeanSession extends AnsiSQLBeanSession {
 		
 	}
 	
+	@Override
 	protected boolean isVarcharUnlimitedSupported() {
 		
 		return true;
