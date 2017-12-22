@@ -101,6 +101,7 @@ public class MySQLBeanSession extends AnsiSQLBeanSession {
 		final StringBuilder sb = new StringBuilder("select last_insert_id() from ");
 
 		sb.append(bc.getTableName());
+		sb.append("limit 1");
 
 		try {
 
