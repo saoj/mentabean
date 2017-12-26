@@ -98,9 +98,9 @@ public class MySQLBeanSession extends AnsiSQLBeanSession {
 
 		ResultSet rset = null;
 
-		final StringBuilder sb = new StringBuilder("select last_insert_id() from ");
-
-		sb.append(bc.getTableName());
+		//final StringBuilder sb = new StringBuilder("select last_insert_id() from ");
+		//sb.append(bc.getTableName());
+		final StringBuilder sb = new StringBuilder("select last_insert_id() ");
 
 		try {
 
