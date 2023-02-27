@@ -229,5 +229,3 @@ if (beanSession.load(user)) {
 ```
 
 More recipes coming soon. Feel free to suggest new ones!
-
-For now, please refer to http://mentabean.soliveirajr.com to see the complete MentaBean documentation.
